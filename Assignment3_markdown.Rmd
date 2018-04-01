@@ -1,0 +1,89 @@
+---
+title: "Assignment 3 Markdown"
+authors: Marygrace, Edwison, Gyasi
+date: March 31st, 2018
+output: html_document
+---
+
+This is the R markdown for Assignment 3 BIO439.
+Marygrace has master repository with Edwison and Gyasi as forked collaborators
+We will be constructing 3 plots representing 3 different reflationships from the data given.
+
+
+The first will display the Hindfoot Length of Male vs. Female for Dipodomys merriami.
+
+
+Let's first load the libraries
+```{r results='hide', message=FALSE, warning=FALSE}
+library(readr)
+library(dplyr)
+```
+
+
+And install respective packages making sure to include the cloning path to the GitHub repository
+```{r cache=FALSE, results=FALSE, warning=FALSE, comment=FALSE}
+install.packages("dplyr", repos = "https://github.com/mtrousdell/Assignment3_BIO439.git")
+install.packages("tidyverse", repos = "https://github.com/mtrousdell/Assignment3_BIO439.git")
+```
+
+
+Now, read in the data and assign to its respective variable for ease of reference.
+```{r results='hide', message=FALSE, warning=FALSE}
+combined_data <- read_csv('combined.csv')
+plots_data <- read_csv('plots.csv')
+species_data <- read_csv('species.csv')
+surveys_data <- read_csv('surveys.csv')
+```
+
+
+Isolate from the imported data the 3 variables of interest (sex, species_id, hindfootlength) and assign to a variable. Remove any NA's existing.
+```{r results='hide', message=FALSE, warning=FALSE}
+Three_variables <- surveys_data[,6:8] %>% filter(!is.na(hindfoot_length)) %>% filter(!is.na(sex)) 
+```
+
+
+
+Isolate only the data for Dipodomys merriami.
+```{r results='hide', message=FALSE, warning=FALSE}
+DM_data <- filter(Three_variables, species_id == 'DM')
+```
+
+
+You can use the simple summary command to get quick stats on your data, just to have an idea of what to expect.
+```{r results='hide', message=FALSE, warning=FALSE}
+summary(DM_data)
+```
+
+
+
+Now that we know some specifics of the data we are dealing with, we shall plot using ggplot.
+First install the library and package.
+```{r results='hide', message=FALSE, warning=FALSE}
+install.packages("ggplot2", repos = "https://github.com/mtrousdell/Assignment3_BIO439.git")
+library(ggplot2) 
+```
+
+
+Start off with the simple aesthetics of a boxplot and assign to a simple variable.
+```{r results='hide', message=FALSE, warning=FALSE}
+p <- ggplot(data = DM_data, aes(x = sex, y = hindfoot_length)) + geom_boxplot()
+```
+
+
+Add to that variable and spice it up with axis labels and summary data.
+```{r results='hide', message=FALSE, warning=FALSE}
+q <- p + ggtitle("Species 'DM' Male vs. Female Hindfoot Lengths") +
+  xlab("Sex") + ylab("Hindfoot Lengths")
+q + stat_summary(fun.y=mean, geom="point", color="blue", size=4) + 
+  geom_jitter(shape=16, position=position_jitter(0.2), alpha = .010)
+
+```
+
+
+
+
+
+
+
+
+
