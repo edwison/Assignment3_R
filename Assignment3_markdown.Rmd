@@ -6,25 +6,34 @@ output: html_document
 ---
 
 This is the R markdown for Assignment 3 BIO439.
-Marygrace has master repository with Edwison and Gyasi as forked collaborators
-We will be constructing 3 plots representing 3 different reflationships from the data given.
+We will be constructing 3 plots representing 3 different relationships from the data given.
+
 
 
 The first will display the Hindfoot Length of Male vs. Female for Dipodomys merriami.
 
 
-Let's first load the libraries
-```{r results='hide', message=FALSE, warning=FALSE}
-library(readr)
-library(dplyr)
-```
 
-
-And install respective packages making sure to include the cloning path to the GitHub repository
+Install packages making sure to include the cloning path to the GitHub repository.
 ```{r cache=FALSE, results=FALSE, warning=FALSE, comment=FALSE}
 install.packages("dplyr", repos = "https://github.com/mtrousdell/Assignment3_BIO439.git")
 install.packages("tidyverse", repos = "https://github.com/mtrousdell/Assignment3_BIO439.git")
+install.packages("ggpubr", repos = "https://github.com/mtrousdell/Assignment3_BIO439.git")
+install.packages("ggplot2", repos = "https://github.com/mtrousdell/Assignment3_BIO439.git")
 ```
+
+
+
+
+Then load the respective libraries
+```{r results='hide', message=FALSE, warning=FALSE}
+library(readr)
+library(dplyr)
+library(ggpubr)
+library(ggplot2)
+```
+
+
 
 
 Now, read in the data and assign to its respective variable for ease of reference.
@@ -36,10 +45,13 @@ surveys_data <- read_csv('surveys.csv')
 ```
 
 
+
+
 Isolate from the imported data the 3 variables of interest (sex, species_id, hindfootlength) and assign to a variable. Remove any NA's existing.
 ```{r results='hide', message=FALSE, warning=FALSE}
 Three_variables <- surveys_data[,6:8] %>% filter(!is.na(hindfoot_length)) %>% filter(!is.na(sex)) 
 ```
+
 
 
 
@@ -49,25 +61,15 @@ DM_data <- filter(Three_variables, species_id == 'DM')
 ```
 
 
-You can use the simple summary command to get quick stats on your data, just to have an idea of what to expect.
-```{r results='hide', message=FALSE, warning=FALSE}
-summary(DM_data)
-```
 
 
-
-Now that we know some specifics of the data we are dealing with, we shall plot using ggplot.
-First install the library and package.
-```{r results='hide', message=FALSE, warning=FALSE}
-install.packages("ggplot2", repos = "https://github.com/mtrousdell/Assignment3_BIO439.git")
-library(ggplot2) 
-```
-
-
+Now we will plot using ggplot.
 Start off with the simple aesthetics of a boxplot and assign to a simple variable.
 ```{r results='hide', message=FALSE, warning=FALSE}
 p <- ggplot(data = DM_data, aes(x = sex, y = hindfoot_length)) + geom_boxplot()
 ```
+
+
 
 
 Add to that variable and spice it up with axis labels and summary data.
@@ -78,6 +80,72 @@ q + stat_summary(fun.y=mean, geom="point", color="blue", size=4) +
   geom_jitter(shape=16, position=position_jitter(0.2), alpha = .010)
 
 ```
+
+
+
+
+
+For the second and third plot we want to plot the relationship between Hindfoot Length vs. Weight for Male and Female for Dipodomys merriami.
+
+
+
+
+We will use similar code structure from the first plot. First, we isolate from the imported data the 4 variables of interest (sex, species_id, hindfootlength, weight) and assign to a variable, making sure to rid of any NA's.
+```{r results='hide', message=FALSE, warning=FALSE}
+Four_variables <- surveys_data[,6:9] %>% filter(!is.na(hindfoot_length)) %>% filter(!is.na(sex)) %>%
+  filter(!is.na(weight))
+```
+
+
+
+
+Subset this data down to just species Dipodomys merriami
+```{r results='hide', message=FALSE, warning=FALSE}
+DM_data2 <- filter(Four_variables, species_id == 'DM')
+```
+
+
+
+
+Further subset the data according to gender and assign to a variable
+```{r results='hide', message=FALSE, warning=FALSE}
+DM_male <- filter(DM_data2, sex == 'M')
+DM_female <- filter(DM_data2, sex == 'F')
+```
+
+
+
+
+Create the plot for Male
+```{r results='hide', message=FALSE, warning=FALSE}
+ggscatter(DM_male, x = "hindfoot_length", y = "weight",title = "Relationship between weight and hindfoot_length of Male DM", xlab = "Hindfoot_length(mm)", ylab = "weight(gm)",
+          add = "reg.line",  # Add regression line
+          add.params = list(color = "blue", fill = "lightgray"), # Customize reg. line
+          conf.int = TRUE ) + stat_cor(method = "pearson", label.x = 20, label.y = 200)
+```
+
+
+
+
+and plot for Female
+```{r results='hide', message=FALSE, warning=FALSE}
+ggscatter(DM_female, x = "hindfoot_length", y = "weight",title = "Relationship between weight and hindfoot_length of Male DM", xlab = "Hindfoot_length(mm)", ylab = "weight(gm)",
+          add = "reg.line",  # Add regressin line
+          add.params = list(color = "blue", fill = "lightgray"), # Customize reg. line
+          conf.int = TRUE ) + stat_cor(method = "pearson", label.x = 20, label.y = 200)
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
