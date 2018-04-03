@@ -1,0 +1,62 @@
+---
+title: "Assignment 3 Markdown"
+authors: Marygrace, Edwison, Gyasi
+date: March 31st, 2018
+output: html_document
+---
+
+This is the R markdown for Assignment 3 BIO439.
+We will be constructing 3 plots representing 3 different relationships from the data given.
+
+
+
+The first will display the Hindfoot Length of Male vs. Female for Dipodomys merriami.
+
+
+
+Install packages making sure to include the cloning path to the GitHub repository.
+```{r cache=FALSE, results=FALSE, warning=FALSE, comment=FALSE}
+install.packages("dplyr", repos = "https://github.com/mtrousdell/Assignment3_BIO439.git")
+install.packages("tidyverse", repos = "https://github.com/mtrousdell/Assignment3_BIO439.git")
+install.packages("ggpubr", repos = "https://github.com/mtrousdell/Assignment3_BIO439.git")
+install.packages("ggplot2", repos = "https://github.com/mtrousdell/Assignment3_BIO439.git")
+```
+
+
+
+
+Then load the respective libraries
+```{r results='hide', message=FALSE, warning=FALSE}
+library(readr)
+library(dplyr)
+library(ggpubr)
+library(ggplot2)
+```
+
+
+
+
+Now, read in the data and assign to its respective variable for ease of reference.
+```{r results='hide', message=FALSE, warning=FALSE}
+combined_data <- read_csv('combined.csv')
+plots_data <- read_csv('plots.csv')
+species_data <- read_csv('species.csv')
+surveys_data <- read_csv('surveys.csv')
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
